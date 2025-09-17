@@ -3,7 +3,7 @@
 console.log('TabZen content script loaded on:', window.location.href)
 
 // Listen for messages from background or popup
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   console.log('Content script received message:', message)
   
   // Echo back for testing
