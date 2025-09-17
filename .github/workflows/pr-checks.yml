@@ -1,0 +1,66 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  pr-validation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Validate PR title
+      uses: amannn/action-semantic-pull-request@v5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        types: |
+          feat
+          fix
+          docs
+          style
+          refactor
+          test
+          build
+          ci
+          chore
+        requireScope: false
+    
+    - name: Check for breaking changes
+      run: |
+        if git log --oneline ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | grep -i "BREAKING CHANGE"; then
+          echo "⚠️ Breaking changes detected in this PR"
+          echo "breaking_change=true" >> $GITHUB_ENV
+        else
+          echo "✅ No breaking changes detected"
+          echo "breaking_change=false" >> $GITHUB_ENV
+        fi
+    
+    - name: Comment breaking changes warning
+      if: env.breaking_change == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '⚠️ **Breaking Changes Detected**\n\nThis PR contains breaking changes. Please ensure:\n- [ ] Version bump reflects breaking changes\n- [ ] Migration guide is updated\n- [ ] All stakeholders are notified'
+          })
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Dependency Review
+      uses: actions/dependency-review-action@v4
+      with:
+        fail-on-severity: moderate
+        allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC

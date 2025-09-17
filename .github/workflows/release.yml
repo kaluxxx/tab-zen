@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests
+      run: npm run test:coverage
+    
+    - name: Build extension
+      run: npm run build
+    
+    - name: Create extension archive
+      run: |
+        cd dist
+        zip -r ../tabzen-extension-${{ github.ref_name }}.zip .
+        cd ..
+    
+    - name: Extract release notes
+      id: extract-release-notes
+      run: |
+        version=${{ github.ref_name }}
+        echo "version=${version}" >> $GITHUB_OUTPUT
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        draft: false
+        prerelease: false
+        files: |
+          tabzen-extension-${{ github.ref_name }}.zip
+        body: |
+          ## TabZen Extension ${{ github.ref_name }}
+          
+          ### 🚀 Features
+          - Chrome extension for intelligent tab management
+          - Automated build and tested release
+          
+          ### 📦 Installation
+          1. Download `tabzen-extension-${{ github.ref_name }}.zip`
+          2. Extract the archive
+          3. Open Chrome -> Extensions -> Developer mode
+          4. Click "Load unpacked" and select the extracted folder
+          
+          ### 🧪 Tested on
+          - Chrome 120+
+          - Node.js 18.x and 20.x
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
