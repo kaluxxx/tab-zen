@@ -17,7 +17,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     },
     "types": ["chrome", "vite/client", "@testing-library/jest-dom", "vitest/globals", "node"]
   },
