@@ -19,14 +19,14 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "types": ["chrome", "vite/client", "@testing-library/jest-dom"]
+    "types": ["chrome", "vite/client", "@testing-library/jest-dom", "vitest/globals"]
   },
   "include": [
     "features",
     "components", 
     "extension",
     "tests",
-    "vite.config.ts"
+    "lib"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
