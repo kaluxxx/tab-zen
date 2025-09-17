@@ -7,7 +7,7 @@ Ce document décrit les conventions à respecter pour garantir un code **mainten
 
 ## 🏗️ Architecture feature-based
 
-Chaque fonctionnalité doit vivre dans un dossier `features/[feature-name]` :
+Chaque fonctionnalité doit vivre dans un dossier `src/features/[feature-name]` :
 
 - `features/`
     - `tabManager/`
@@ -30,7 +30,7 @@ Chaque fonctionnalité doit vivre dans un dossier `features/[feature-name]` :
 ## 💻 Conventions de code
 
 - **Langage** : TypeScript strict (`"strict": true`).
-- **Imports** : chemins relatifs courts avec alias (`@/features/...`).
+- **Imports** : chemins relatifs courts avec alias (`@/features/...` pour `src/features/...`).
 - **Pas de `any`** sauf cas exceptionnel documenté.
 - **Nom des fichiers** :
     - `kebab-case.tsx` → composants React
@@ -48,15 +48,15 @@ Stratégie :
 3. Refactoriser si besoin.
 
 ### Niveaux de tests
-- **Unitaires** → `lib/`, `utils/`, `services/`.
-- **Intégration** → `hooks/`, `components/`.
+- **Unitaires** → `src/lib/`, `src/features/*/utils/`, `src/features/*/services/`.
+- **Intégration** → `src/features/*/hooks/`, `src/features/*/components/`.
 - **E2E (Playwright, V1+)** → parcours utilisateur dans la popup.
 
 ### Règles
 - Chaque nouvelle fonction doit être testée.
 - Couverture minimale : **80%**.
 - Les tests vivent **à côté** du code testé :  
-  lib/
+  src/features/tabManager/lib/
   ├─ tabClassifier.ts
   └─ tabClassifier.test.ts
 
