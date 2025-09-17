@@ -1,0 +1,33 @@
+import type { TabList } from '../types';
+
+export const tabService = {
+  async getAllTabs(): Promise<TabList> {
+    try {
+      return new Promise((resolve, reject) => {
+        chrome.tabs.query({}, (tabs) => {
+          if (chrome.runtime.lastError) {
+            reject(new Error('Failed to fetch tabs'));
+            return;
+          }
+          
+          const tabList: TabList = {
+            tabs: tabs.map(tab => ({
+              id: tab.id!,
+              title: tab.title || '',
+              url: tab.url || '',
+              favIconUrl: tab.favIconUrl,
+              active: tab.active || false,
+              windowId: tab.windowId!,
+              index: tab.index
+            })),
+            totalCount: tabs.length
+          };
+          
+          resolve(tabList);
+        });
+      });
+    } catch (error) {
+      throw new Error('Failed to fetch tabs');
+    }
+  }
+};
