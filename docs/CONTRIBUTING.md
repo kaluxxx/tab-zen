@@ -9,16 +9,15 @@ Ce document décrit les conventions à respecter pour garantir un code **mainten
 
 Chaque fonctionnalité doit vivre dans un dossier `features/[feature-name]` :
 
-- `src/`
-    - `features/`
-        - `tabManager/`
-            - `components/` : UI (stateless) – React + shadcn
-            - `hooks/` : logique React réutilisable (state + side-effects)
-            - `lib/` : algorithmes d’organisation IA (regex, heuristiques)
-            - `services/` : interactions Chrome API (tabs, storage)
-            - `types/` : définitions TypeScript (Tab, Group, Session)
-            - `utils/` : helpers purs (formatage, filtre, tri)
-            - `pages/` : Popup principale, Options
+- `features/`
+    - `tabManager/`
+        - `components/` : UI (stateless) – React + shadcn
+        - `hooks/` : logique React réutilisable (state + side-effects)
+        - `lib/` : algorithmes d’organisation IA (regex, heuristiques)
+        - `services/` : interactions Chrome API (tabs, storage)
+        - `types/` : définitions TypeScript (Tab, Group, Session)
+        - `utils/` : helpers purs (formatage, filtre, tri)
+        - `pages/` : Popup principale, Options
 
 
 🔑 **Règle d’or** :
