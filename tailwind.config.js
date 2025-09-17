@@ -2,7 +2,7 @@
 export default {
     darkMode: ['class'],
     content: [
-    './extension/**/*.{ts,tsx,html}',
+    './src/**/*.{ts,tsx,html}',
     './features/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './lib/**/*.{ts,tsx}',

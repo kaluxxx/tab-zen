@@ -12,16 +12,10 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "popup/index.html",
-    "default_title": "TabZen - Manage your tabs",
-    "default_icon": {
-      "16": "assets/icon-16.png",
-      "32": "assets/icon-32.png",
-      "48": "assets/icon-48.png",
-      "128": "assets/icon-128.png"
-    }
+    "default_popup": "src/extension/popup/index.html",
+    "default_title": "TabZen - Manage your tabs"
   },
-  "options_page": "options/index.html",
+  "options_page": "src/extension/options/index.html",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -29,12 +23,6 @@
       "run_at": "document_end"
     }
   ],
-  "icons": {
-    "16": "assets/icon-16.png",
-    "32": "assets/icon-32.png",
-    "48": "assets/icon-48.png",
-    "128": "assets/icon-128.png"
-  },
   "web_accessible_resources": [
     {
       "resources": ["assets/*"],
