@@ -77,6 +77,15 @@ Stratégie :
 
 ---
 
+## 📈 Suivi des progrès
+
+**IMPORTANT :** Mettre à jour [`docs/PROGRESS_TRACKER.md`](PROGRESS_TRACKER.md) à chaque :
+- Completion d'une user story
+- Ajout d'une nouvelle fonctionnalité 
+- Modification d'architecture significative
+
+Ce fichier sert de référence pour l'équipe et les futurs développeurs.
+
 ## ✅ Checklist avant merge
 
 - [ ] Code formaté (Prettier).
@@ -84,6 +93,7 @@ Stratégie :
 - [ ] Tests ajoutés et verts.
 - [ ] Documentation (JSDoc / commentaires si logique complexe).
 - [ ] Respect de la structure feature-based.
+- [ ] **`PROGRESS_TRACKER.md` mis à jour si applicable.**
 
 ---
 

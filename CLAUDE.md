@@ -10,11 +10,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - [`docs/SPEC.md`](docs/SPEC.md) - Functional specifications, user stories, and workflows  
 - [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) - Development conventions, code style, and contribution guidelines
 - [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md) - Testing strategy, TDD approach, and coverage requirements
-- [`docs/GIT_FLOW.md`](docs/GIT_FLOW.md) - Git branching strategy, pull request process, and release process 
+- [`docs/GIT_FLOW.md`](docs/GIT_FLOW.md) - Git branching strategy, pull request process, and release process
+- [`docs/PROGRESS_TRACKER.md`](docs/PROGRESS_TRACKER.md) - Current progress tracking for user stories and features 
 
 ## Workflow Guidelines
 
 - Toujours se référer aux fichiers de @docs\ avant de faire quoi que ce soit 
+- **IMPORTANT**: Mettre à jour `docs/PROGRESS_TRACKER.md` après chaque user story complétée
+- **TDD OBLIGATOIRE**: Toujours écrire les tests en premier, puis implémenter le code 
 
 ## Quick Reference
 
