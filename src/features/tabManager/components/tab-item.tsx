@@ -1,13 +1,15 @@
-import { FileIcon } from 'lucide-react';
+import { FileIcon, X } from 'lucide-react';
 import { extractDomain } from '../utils/url-utils';
 import type { Tab } from '../types';
 import { cn } from '../../../lib/utils';
+import { Button } from '../../../components/ui/button';
 
 interface TabItemProps {
   tab: Tab;
+  onClose?: (tabId: number) => void;
 }
 
-export function TabItem({ tab }: TabItemProps) {
+export function TabItem({ tab, onClose }: TabItemProps) {
   return (
     <div
       data-testid="tab-item"
@@ -47,6 +49,23 @@ export function TabItem({ tab }: TabItemProps) {
           {extractDomain(tab.url)}
         </div>
       </div>
+
+      {/* Close button */}
+      {onClose && (
+        <Button
+          data-testid="close-tab-button"
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose(tab.id);
+          }}
+          className="flex-shrink-0 h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+          aria-label={`Fermer l'onglet ${tab.title}`}
+        >
+          <X className="w-4 h-4" />
+        </Button>
+      )}
     </div>
   );
 }

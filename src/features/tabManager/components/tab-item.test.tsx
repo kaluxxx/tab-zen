@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { TabItem } from './tab-item';
 import type { Tab } from '../types';
 
@@ -53,7 +53,56 @@ describe('TabItem', () => {
   it('should handle missing title', () => {
     const tabWithoutTitle = { ...mockTab, title: '' };
     render(<TabItem tab={tabWithoutTitle} />);
-    
+
     expect(screen.getByText('Sans titre')).toBeInTheDocument();
+  });
+
+  it('should not render close button when onClose is not provided', () => {
+    render(<TabItem tab={mockTab} />);
+
+    expect(screen.queryByTestId('close-tab-button')).not.toBeInTheDocument();
+  });
+
+  it('should render close button when onClose is provided', () => {
+    const mockOnClose = vi.fn();
+    render(<TabItem tab={mockTab} onClose={mockOnClose} />);
+
+    expect(screen.getByTestId('close-tab-button')).toBeInTheDocument();
+  });
+
+  it('should call onClose with tab id when close button is clicked', () => {
+    const mockOnClose = vi.fn();
+    render(<TabItem tab={mockTab} onClose={mockOnClose} />);
+
+    const closeButton = screen.getByTestId('close-tab-button');
+    fireEvent.click(closeButton);
+
+    expect(mockOnClose).toHaveBeenCalledWith(mockTab.id);
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('should stop propagation when close button is clicked', () => {
+    const mockOnClose = vi.fn();
+    const mockParentClick = vi.fn();
+
+    render(
+      <div onClick={mockParentClick}>
+        <TabItem tab={mockTab} onClose={mockOnClose} />
+      </div>
+    );
+
+    const closeButton = screen.getByTestId('close-tab-button');
+    fireEvent.click(closeButton);
+
+    expect(mockOnClose).toHaveBeenCalledWith(mockTab.id);
+    expect(mockParentClick).not.toHaveBeenCalled();
+  });
+
+  it('should have proper accessibility label for close button', () => {
+    const mockOnClose = vi.fn();
+    render(<TabItem tab={mockTab} onClose={mockOnClose} />);
+
+    const closeButton = screen.getByTestId('close-tab-button');
+    expect(closeButton).toHaveAttribute('aria-label', `Fermer l'onglet ${mockTab.title}`);
   });
 });
