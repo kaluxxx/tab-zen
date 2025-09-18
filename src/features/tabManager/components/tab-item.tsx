@@ -1,4 +1,5 @@
 import { FileIcon, X } from 'lucide-react';
+import { memo } from 'react';
 import { extractDomain } from '../utils/url-utils';
 import type { Tab } from '../types';
 import { cn } from '../../../lib/utils';
@@ -10,7 +11,7 @@ interface TabItemProps {
   onNavigate?: (tabId: number, windowId: number) => void;
 }
 
-export function TabItem({ tab, onClose, onNavigate }: TabItemProps) {
+export const TabItem = memo(function TabItem({ tab, onClose, onNavigate }: TabItemProps) {
   return (
     <div
       data-testid="tab-item"
@@ -71,4 +72,4 @@ export function TabItem({ tab, onClose, onNavigate }: TabItemProps) {
       )}
     </div>
   );
-}
+});
