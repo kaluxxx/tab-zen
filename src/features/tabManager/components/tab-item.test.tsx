@@ -105,4 +105,52 @@ describe('TabItem', () => {
     const closeButton = screen.getByTestId('close-tab-button');
     expect(closeButton).toHaveAttribute('aria-label', `Fermer l'onglet ${mockTab.title}`);
   });
+
+  it('should call onNavigate when tab item is clicked', () => {
+    const mockOnNavigate = vi.fn();
+    render(<TabItem tab={mockTab} onNavigate={mockOnNavigate} />);
+
+    const tabItem = screen.getByTestId('tab-item');
+    fireEvent.click(tabItem);
+
+    expect(mockOnNavigate).toHaveBeenCalledWith(mockTab.id, mockTab.windowId);
+    expect(mockOnNavigate).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not call onNavigate when not provided', () => {
+    const mockOnNavigate = vi.fn();
+    render(<TabItem tab={mockTab} />);
+
+    const tabItem = screen.getByTestId('tab-item');
+    fireEvent.click(tabItem);
+
+    expect(mockOnNavigate).not.toHaveBeenCalled();
+  });
+
+  it('should add cursor-pointer class when onNavigate is provided', () => {
+    const mockOnNavigate = vi.fn();
+    render(<TabItem tab={mockTab} onNavigate={mockOnNavigate} />);
+
+    const tabItem = screen.getByTestId('tab-item');
+    expect(tabItem).toHaveClass('cursor-pointer');
+  });
+
+  it('should not add cursor-pointer class when onNavigate is not provided', () => {
+    render(<TabItem tab={mockTab} />);
+
+    const tabItem = screen.getByTestId('tab-item');
+    expect(tabItem).not.toHaveClass('cursor-pointer');
+  });
+
+  it('should not call onNavigate when close button is clicked', () => {
+    const mockOnClose = vi.fn();
+    const mockOnNavigate = vi.fn();
+    render(<TabItem tab={mockTab} onClose={mockOnClose} onNavigate={mockOnNavigate} />);
+
+    const closeButton = screen.getByTestId('close-tab-button');
+    fireEvent.click(closeButton);
+
+    expect(mockOnClose).toHaveBeenCalledWith(mockTab.id);
+    expect(mockOnNavigate).not.toHaveBeenCalled();
+  });
 });
