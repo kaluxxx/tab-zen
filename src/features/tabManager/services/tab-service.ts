@@ -29,5 +29,21 @@ export const tabService = {
     } catch (error) {
       throw new Error('Failed to fetch tabs');
     }
+  },
+
+  async closeTab(tabId: number): Promise<void> {
+    try {
+      return new Promise((resolve, reject) => {
+        chrome.tabs.remove(tabId, () => {
+          if (chrome.runtime.lastError) {
+            reject(new Error('Failed to close tab'));
+            return;
+          }
+          resolve();
+        });
+      });
+    } catch (error) {
+      throw new Error('Failed to close tab');
+    }
   }
 };
