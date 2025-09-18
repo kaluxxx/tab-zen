@@ -49,7 +49,6 @@
     - `chrome.runtime` → communication background ↔ popup
 - **Tests** :
     - `Vitest + React Testing Library` → unitaires & intégration
-    - `Playwright` → E2E avec contexte Chrome extension
 
 ---
 
@@ -130,5 +129,4 @@
     - `src/lib/` et `src/features/*/utils/` purs → tests unitaires simples.
     - `src/features/*/services/` → mock Chrome API.
     - `src/features/*/hooks/` → tests intégration avec React Testing Library.
-    - E2E → Playwright.
 - **Scalabilité** : nouvelle feature = nouveau dossier dans `src/features/`.  

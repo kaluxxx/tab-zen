@@ -4,7 +4,7 @@
 - Garantir la stabilité et la maintenabilité de l’extension.
 - Vérifier la cohérence fonctionnelle sur chaque release.
 - Mettre en place une approche **TDD (Test-Driven Development)** pour favoriser la qualité du code.
-- Cibler à la fois les **tests unitaires**, **tests d’intégration** et **tests end-to-end (E2E)**.
+- Cibler principalement les **tests unitaires** et **tests d'intégration**.
 
 ---
 
@@ -25,19 +25,11 @@
     - `Sidebar` + `GroupingPanel` → vérifier que les suggestions IA modifient bien l’état global.
     - Persistance via `chrome.storage` → mocker l’API Chrome.
 
-### 2.3 Tests End-to-End (E2E)
-- **Portée** : scénarios utilisateur complets dans Chrome.
-- **Outils** : Playwright (ou Puppeteer).
-- **Exemples** :
-    - Ouvrir plusieurs onglets → vérifier qu’ils apparaissent dans le popup.
-    - Cliquer sur “Regrouper par IA” → les onglets sont classés correctement.
-    - Fermer un groupe → vérifier que les onglets correspondants disparaissent.
-
-### 2.4 Tests de performance
+### 2.3 Tests de performance
 - Vérifier que la suggestion IA ne dépasse pas un certain temps (ex. < 1,5s).
 - Vérifier que le rendu du popup reste fluide avec **200 onglets ouverts**.
 
-### 2.5 Tests de sécurité
+### 2.4 Tests de sécurité
 - Vérifier que les données sensibles ne sont **jamais envoyées en clair**.
 - Vérifier la robustesse face aux inputs malicieux (ex. nom d’onglet contenant du code HTML → éviter XSS dans l’UI).
 
@@ -83,7 +75,6 @@
 ## 5. 🔧 Outils & Setup
 - **Unitaires / Intégration** : Vitest + React Testing Library.
 - **Mocks Chrome API** : `Vitest-chrome`.
-- **E2E** : Playwright (avec mode “persistent context” pour Chrome).
 - **Coverage** : `Vitest --coverage` (objectif : >90%).
 
 ---
@@ -94,4 +85,4 @@
     - 95% sur `utils/` et `services/`.
     - 90% sur `hooks/`.
     - 85% sur `components/`.
-- Tous les scénarios E2E critiques doivent passer sur **2 environnements Chrome** (stable + beta).  
+- Focus sur les tests unitaires et d'intégration pour garantir la qualité.  
