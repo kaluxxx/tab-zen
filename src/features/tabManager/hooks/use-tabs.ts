@@ -6,10 +6,11 @@ interface UseTabsReturn {
   tabs: Tab[];
   isLoading: boolean;
   error: Error | null;
+  refetch: () => void;
 }
 
 export function useTabs(): UseTabsReturn {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['tabs'],
     queryFn: async () => {
       const tabList = await tabService.getAllTabs();
@@ -20,6 +21,7 @@ export function useTabs(): UseTabsReturn {
   return {
     tabs: data || [],
     isLoading,
-    error
+    error,
+    refetch
   };
 }

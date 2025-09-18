@@ -6,11 +6,21 @@ import { SearchInput } from '../components/search-input';
 import { ErrorMessage } from '../../../shared/components/error-message';
 import { LoadingMessage } from '../../../shared/components/loading-message';
 import { Header } from '../components/header';
+import { tabService } from '../services/tab-service';
 
 export function Popup() {
-  const { tabs, isLoading, error } = useTabs();
+  const { tabs, isLoading, error, refetch } = useTabs();
   const [searchTerm, setSearchTerm] = useState('');
   const { filteredTabs, hasResults } = useTabSearch(tabs, searchTerm);
+
+  const handleCloseTab = async (tabId: number) => {
+    try {
+      await tabService.closeTab(tabId);
+      refetch();
+    } catch (error) {
+      console.error('Failed to close tab:', error);
+    }
+  };
 
   if (error) {
     return <ErrorMessage message={error.message} />;
@@ -34,7 +44,7 @@ export function Popup() {
             Aucun onglet trouvé pour &ldquo;{searchTerm}&rdquo;
           </div>
         ) : (
-          <TabList tabs={filteredTabs} />
+          <TabList tabs={filteredTabs} onCloseTab={handleCloseTab} />
         )}
       </div>
     </div>
