@@ -4,13 +4,13 @@ Ce fichier suit l'avancement des user stories et fonctionnalités développées.
 
 ## 📊 Vue d'ensemble
 
-**Progression globale :** 2/9 user stories complétées
+**Progression globale :** 3/9 user stories complétées
 
 | User Story | Statut | Date de completion | Notes |
 |------------|--------|-------------------|-------|
 | US1 - Afficher tous les onglets | ✅ Complété | 2025-09-17 | Architecture de base mise en place |
 | US2 - Rechercher un onglet | ✅ Complété | 2025-09-17 | Recherche par titre/URL en temps réel |
-| US3 - Fermer un onglet | ⏳ À faire | - | - |
+| US3 - Fermer un onglet | ✅ Complété | 2025-09-18 | Bouton fermer avec shadcn/ui Button |
 | US4 - Naviguer vers un onglet | ⏳ À faire | - | - |
 | US5 - Regroupement automatique | ⏳ À faire | - | Catégorisation IA |
 | US6 - Sauvegarder une session | ⏳ À faire | - | - |
@@ -59,15 +59,20 @@ Ce fichier suit l'avancement des user stories et fonctionnalités développées.
 
 ---
 
-### US3 - Fermer un onglet ⏳
+### US3 - Fermer un onglet ✅
 
 **Objectif :** En tant qu'utilisateur, je veux fermer un onglet depuis l'extension.
 
-**À planifier :**
-- Bouton "fermer" sur chaque `TabItem`
-- Service pour `chrome.tabs.remove()`
-- Mise à jour de la liste après fermeture
-- Gestion des erreurs (onglet déjà fermé, permissions)
+**Implémentation complétée :**
+- ✅ Méthode `closeTab(tabId)` dans `tabService` avec gestion d'erreur
+- ✅ Bouton "×" sur chaque `TabItem` avec shadcn/ui Button (ghost variant)
+- ✅ Handler `onClose` avec propagation d'événement arrêtée
+- ✅ Intégration dans `TabList` et `Popup` avec refetch automatique
+- ✅ Tests unitaires complets : service (4 tests) + composant (6 tests)
+- ✅ Gestion des erreurs Chrome API et feedback utilisateur
+- ✅ Accessibilité avec aria-label approprié
+
+**Tests passants :** 31/31 (+10 nouveaux tests)
 
 ---
 
@@ -132,5 +137,5 @@ src/features/tabManager/
 
 ---
 
-**Dernière mise à jour :** 2025-09-17
-**Prochaine user story :** US3 - Fermer un onglet
+**Dernière mise à jour :** 2025-09-18
+**Prochaine user story :** US4 - Naviguer vers un onglet

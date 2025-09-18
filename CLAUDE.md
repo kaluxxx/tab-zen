@@ -37,3 +37,4 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Stateless components, pure functions in lib/utils
 - TypeScript strict mode, no `any`
 - Chrome APIs: tabs, storage, runtime
+- utilise shadcn et ses composants dès que c'est possible !

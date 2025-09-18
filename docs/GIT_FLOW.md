@@ -50,7 +50,6 @@ Ce document définit le workflow Git adopté pour le projet **TabZen** afin de g
 5. Passer la CI/CD :
     - ✅ Tests unitaires & intégration (Jest, RTL).
     - ✅ Linter & formatage (ESLint, Prettier).
-    - ✅ Tests E2E Playwright (si nécessaire).
 6. Code review → squash & merge.
 7. Quand `develop` est stable → créer `release/x.y.z`.
 8. Tests finaux → merge dans `main`.
@@ -63,7 +62,7 @@ Ce document définit le workflow Git adopté pour le projet **TabZen** afin de g
 - Utiliser **Conventional Commits** :
     - `feat: ajout regroupement IA des onglets`
     - `fix: correction bug recherche avec accents`
-    - `test: ajout test e2e sur popup`
+    - `test: ajout test unitaire pour popup`
     - `docs: mise à jour CONTRIBUTING.md`
 
 - Chaque commit doit être **atomique** (une seule logique par commit).

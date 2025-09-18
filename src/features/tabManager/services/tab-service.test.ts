@@ -4,7 +4,8 @@ import { tabService } from './tab-service';
 // Mock Chrome API
 const mockChrome = {
   tabs: {
-    query: vi.fn()
+    query: vi.fn(),
+    remove: vi.fn()
   },
   runtime: {
     lastError: undefined as chrome.runtime.LastError | undefined
@@ -115,6 +116,59 @@ describe('tabService', () => {
 
       // Assert
       expect(result.tabs[0].favIconUrl).toBeUndefined();
+    });
+  });
+
+  describe('closeTab', () => {
+    it('should close tab successfully', async () => {
+      // Arrange
+      const tabId = 123;
+      mockChrome.tabs.remove.mockImplementation((_tabIds, callback) => {
+        if (callback) callback();
+      });
+
+      // Act
+      await tabService.closeTab(tabId);
+
+      // Assert
+      expect(mockChrome.tabs.remove).toHaveBeenCalledWith(tabId, expect.any(Function));
+    });
+
+    it('should throw error when tab does not exist', async () => {
+      // Arrange
+      const tabId = 999;
+      mockChrome.runtime.lastError = { message: 'No tab with id: 999' } as chrome.runtime.LastError;
+      mockChrome.tabs.remove.mockImplementation((_tabIds, callback) => {
+        if (callback) callback();
+      });
+
+      // Act & Assert
+      await expect(tabService.closeTab(tabId)).rejects.toThrow('Failed to close tab');
+
+      // Cleanup
+      mockChrome.runtime.lastError = undefined;
+    });
+
+    it('should throw error when chrome.tabs.remove fails', async () => {
+      // Arrange
+      const tabId = 123;
+      mockChrome.tabs.remove.mockImplementation(() => {
+        throw new Error('Chrome API error');
+      });
+
+      // Act & Assert
+      await expect(tabService.closeTab(tabId)).rejects.toThrow('Chrome API error');
+    });
+
+    it('should handle callback without error', async () => {
+      // Arrange
+      const tabId = 123;
+      mockChrome.tabs.remove.mockImplementation((_tabIds, callback) => {
+        if (callback) callback();
+      });
+
+      // Act & Assert
+      await expect(tabService.closeTab(tabId)).resolves.toBeUndefined();
     });
   });
 });
