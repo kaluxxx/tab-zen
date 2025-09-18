@@ -4,14 +4,14 @@ Ce fichier suit l'avancement des user stories et fonctionnalités développées.
 
 ## 📊 Vue d'ensemble
 
-**Progression globale :** 3/9 user stories complétées
+**Progression globale :** 4/9 user stories complétées
 
 | User Story | Statut | Date de completion | Notes |
 |------------|--------|-------------------|-------|
 | US1 - Afficher tous les onglets | ✅ Complété | 2025-09-17 | Architecture de base mise en place |
 | US2 - Rechercher un onglet | ✅ Complété | 2025-09-17 | Recherche par titre/URL en temps réel |
 | US3 - Fermer un onglet | ✅ Complété | 2025-09-18 | Bouton fermer avec shadcn/ui Button |
-| US4 - Naviguer vers un onglet | ⏳ À faire | - | - |
+| US4 - Naviguer vers un onglet | ✅ Complété | 2025-09-18 | Click navigation + fermeture popup |
 | US5 - Regroupement automatique | ⏳ À faire | - | Catégorisation IA |
 | US6 - Sauvegarder une session | ⏳ À faire | - | - |
 | US7 - Suggestions onglets inactifs | ⏳ À faire | - | - |
@@ -76,14 +76,21 @@ Ce fichier suit l'avancement des user stories et fonctionnalités développées.
 
 ---
 
-### US4 - Naviguer vers un onglet ⏳
+### US4 - Naviguer vers un onglet ✅
 
 **Objectif :** En tant qu'utilisateur, je veux naviguer vers un onglet directement depuis la liste.
 
-**À planifier :**
-- Click handler sur `TabItem`
-- Service pour `chrome.tabs.update()` avec focus
-- Fermeture automatique de la popup après navigation
+**Implémentation complétée :**
+- ✅ Méthode `switchToTab(tabId, windowId)` dans `tabService`
+- ✅ Chrome API : `tabs.update()` + `windows.update()` pour focus complet
+- ✅ Click handler sur zone TabItem (évite conflit avec bouton close)
+- ✅ Cursor pointer et feedback hover pour UX intuitive
+- ✅ Fermeture automatique popup après navigation réussie
+- ✅ Intégration complète : TabItem → TabList → Popup
+- ✅ Tests unitaires complets : service (5 tests) + composant (5 tests)
+- ✅ Gestion d'erreur robuste avec logging console
+
+**Tests passants :** 70/70 (+10 nouveaux tests)
 
 ---
 
@@ -138,4 +145,4 @@ src/features/tabManager/
 ---
 
 **Dernière mise à jour :** 2025-09-18
-**Prochaine user story :** US4 - Naviguer vers un onglet
+**Prochaine user story :** US5 - Regroupement automatique par IA
