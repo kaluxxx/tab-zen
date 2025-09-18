@@ -65,7 +65,18 @@ Ce document définit le workflow Git adopté pour le projet **TabZen** afin de g
     - `test: ajout test unitaire pour popup`
     - `docs: mise à jour CONTRIBUTING.md`
 
-- Chaque commit doit être **atomique** (une seule logique par commit).
+- **OBLIGATOIRE : Commits atomiques**
+    - Un commit = une seule logique/fonctionnalité
+    - Séparer types, services, composants, tests en commits distincts
+    - Exemple pour une feature :
+        1. `feat: add tab grouping types and interfaces`
+        2. `feat: implement grouping service with domain classification`
+        3. `feat: add tab grouping React hook`
+        4. `feat: create TabGroup and GroupToggle UI components`
+        5. `feat: integrate grouping into TabList and Popup`
+        6. `test: add comprehensive tests for grouping functionality`
+        7. `perf: optimize performance with virtualization for 200+ tabs`
+        8. `docs: update PROGRESS_TRACKER for US5 completion`
 
 ---
 

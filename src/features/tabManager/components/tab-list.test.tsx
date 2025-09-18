@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { TabList } from './tab-list';
-import type { Tab } from '../types';
+import type { Tab, TabGroup } from '../types';
 
 describe('TabList', () => {
   const mockTabs: Tab[] = [
@@ -104,5 +104,137 @@ describe('TabList', () => {
 
     // Assert
     expect(screen.getByText('very-long-domain-name.example.com')).toBeInTheDocument();
+  });
+
+  describe('grouped view', () => {
+    const mockGroups: TabGroup[] = [
+      {
+        id: 'group-dev-1',
+        name: 'Development',
+        category: 'development',
+        isExpanded: true,
+        tabs: [mockTabs[1]], // GitHub tab
+      },
+      {
+        id: 'group-other-1',
+        name: 'Other',
+        category: 'other',
+        isExpanded: true,
+        tabs: [mockTabs[0]], // Google tab
+      },
+    ];
+
+    const mockCallbacks = {
+      onCloseTab: vi.fn(),
+      onNavigateToTab: vi.fn(),
+      onToggleGroupExpansion: vi.fn(),
+    };
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('should render groups when isGrouped is true', () => {
+      // Act
+      render(
+        <TabList
+          tabs={[]}
+          groups={mockGroups}
+          isGrouped={true}
+          {...mockCallbacks}
+        />
+      );
+
+      // Assert
+      expect(screen.getByText('Development')).toBeInTheDocument();
+      expect(screen.getByText('Other')).toBeInTheDocument();
+      expect(screen.getByText('GitHub - Where the world builds software')).toBeInTheDocument();
+      expect(screen.getByText('Google')).toBeInTheDocument();
+    });
+
+    it('should render tabs normally when isGrouped is false', () => {
+      // Act
+      render(
+        <TabList
+          tabs={mockTabs}
+          groups={mockGroups}
+          isGrouped={false}
+          {...mockCallbacks}
+        />
+      );
+
+      // Assert
+      // Should render as normal tab list
+      expect(screen.getByText('Google')).toBeInTheDocument();
+      expect(screen.getByText('GitHub - Where the world builds software')).toBeInTheDocument();
+      // Should not render group headers
+      expect(screen.queryByText('Development')).not.toBeInTheDocument();
+      expect(screen.queryByText('Other')).not.toBeInTheDocument();
+    });
+
+    it('should show empty state when no groups in grouped view', () => {
+      // Act
+      render(
+        <TabList
+          tabs={[]}
+          groups={[]}
+          isGrouped={true}
+          {...mockCallbacks}
+        />
+      );
+
+      // Assert
+      expect(screen.getByText('Aucun onglet trouvé')).toBeInTheDocument();
+    });
+
+    it('should call onToggleGroupExpansion when group is clicked', () => {
+      // Act
+      render(
+        <TabList
+          tabs={[]}
+          groups={mockGroups}
+          isGrouped={true}
+          {...mockCallbacks}
+        />
+      );
+
+      const developmentHeader = screen.getByText('Development');
+      fireEvent.click(developmentHeader);
+
+      // Assert
+      expect(mockCallbacks.onToggleGroupExpansion).toHaveBeenCalledWith('group-dev-1');
+    });
+
+    it('should pass tab callbacks to group components', () => {
+      // Act
+      render(
+        <TabList
+          tabs={[]}
+          groups={mockGroups}
+          isGrouped={true}
+          {...mockCallbacks}
+        />
+      );
+
+      // Assert - Groups should render with tab items that have callbacks
+      const tabItems = screen.getAllByTestId('tab-item');
+      expect(tabItems).toHaveLength(2); // One from each group
+    });
+
+    it('should render groups with proper spacing', () => {
+      // Act
+      render(
+        <TabList
+          tabs={[]}
+          groups={mockGroups}
+          isGrouped={true}
+          {...mockCallbacks}
+        />
+      );
+
+      // Assert
+      const groups = screen.getAllByTestId('tab-group');
+      expect(groups).toHaveLength(2);
+    });
   });
 });

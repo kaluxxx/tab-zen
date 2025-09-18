@@ -4,7 +4,7 @@ Ce fichier suit l'avancement des user stories et fonctionnalités développées.
 
 ## 📊 Vue d'ensemble
 
-**Progression globale :** 4/9 user stories complétées
+**Progression globale :** 5/9 user stories complétées
 
 | User Story | Statut | Date de completion | Notes |
 |------------|--------|-------------------|-------|
@@ -12,7 +12,7 @@ Ce fichier suit l'avancement des user stories et fonctionnalités développées.
 | US2 - Rechercher un onglet | ✅ Complété | 2025-09-17 | Recherche par titre/URL en temps réel |
 | US3 - Fermer un onglet | ✅ Complété | 2025-09-18 | Bouton fermer avec shadcn/ui Button |
 | US4 - Naviguer vers un onglet | ✅ Complété | 2025-09-18 | Click navigation + fermeture popup |
-| US5 - Regroupement automatique | ⏳ À faire | - | Catégorisation IA |
+| US5 - Regroupement automatique | ✅ Complété | 2025-09-18 | Groupes par domaine + virtualisation |
 | US6 - Sauvegarder une session | ⏳ À faire | - | - |
 | US7 - Suggestions onglets inactifs | ⏳ À faire | - | - |
 | US8 - Configuration catégories | ⏳ À faire | - | - |
@@ -94,6 +94,30 @@ Ce fichier suit l'avancement des user stories et fonctionnalités développées.
 
 ---
 
+### US5 - Regroupement automatique ✅
+
+**Objectif :** En tant qu'utilisateur, je veux que mes onglets soient automatiquement regroupés par catégories.
+
+**Implémentation complétée :**
+- ✅ Service `groupingService` pour catégorisation des onglets par domaine
+- ✅ Classificateur `tabClassifier` avec heuristics basées sur les domaines
+- ✅ Hook `useTabGrouping()` pour gestion des groupes et état UI
+- ✅ Composant `TabGroup` pour affichage des groupes avec expand/collapse
+- ✅ Composant `GroupToggle` pour activation/désactivation du groupement
+- ✅ Logique de génération de couleurs pour catégories (`category-colors`)
+- ✅ Optimisation performance avec `react-window` pour virtualisation
+- ✅ Mémoïsation des composants avec `React.memo()` et `useCallback()`
+- ✅ Tests unitaires complets (services, hooks, composants, performance)
+- ✅ Gestion des cas edge (onglets non catégorisables, expansion/réduction)
+- ✅ Intégration complète dans `TabList` avec mode liste/groupé
+- ✅ Fix refetch après fermeture d'onglet en mode groupé
+
+**Tests passants :** 145/145 (+75 nouveaux tests)
+
+**Catégories supportées :** Development, Social, Media, Shopping, Work, Education, News, Entertainment, Finance, Other
+
+---
+
 ## 🔧 Architecture actuelle
 
 ### Structure des fichiers
@@ -102,17 +126,29 @@ src/features/tabManager/
 ├── components/
 │   ├── header.tsx + .test.tsx
 │   ├── tab-item.tsx + .test.tsx
-│   └── tab-list.tsx + .test.tsx
+│   ├── tab-list.tsx + .test.tsx
+│   ├── tab-group.tsx + .test.tsx
+│   ├── group-toggle.tsx + .test.tsx
+│   ├── virtualized-tab-list.tsx + .test.tsx
+│   └── performance.test.tsx
 ├── hooks/
-│   └── use-tabs.ts + .test.tsx
+│   ├── use-tabs.ts + .test.tsx
+│   ├── use-tab-search.ts + .test.tsx
+│   └── use-tab-grouping.ts + .test.tsx
 ├── services/
-│   └── tab-service.ts + .test.ts
+│   ├── tab-service.ts + .test.ts
+│   └── grouping-service.ts + .test.ts
+├── lib/
+│   ├── tab-classifier.ts + .test.ts
+│   └── grouping-heuristics.ts + .test.ts
 ├── types/
 │   ├── index.ts
 │   ├── tab.ts
-│   └── tab-list.ts
+│   ├── tab-list.ts
+│   └── tab-group.ts
 ├── utils/
-│   └── url-utils.ts + .test.ts
+│   ├── url-utils.ts + .test.ts
+│   └── category-colors.ts + .test.ts
 └── pages/
     └── popup.tsx
 ```
@@ -121,6 +157,7 @@ src/features/tabManager/
 - **Frontend :** React 18 + TypeScript
 - **Styling :** Tailwind CSS + shadcn/ui
 - **State :** React Query
+- **Performance :** react-window (virtualisation)
 - **Tests :** Vitest + React Testing Library
 - **Chrome APIs :** tabs, storage, runtime
 
@@ -136,13 +173,13 @@ src/features/tabManager/
 - ✅ Composants stateless
 - ✅ Gestion d'erreur centralisée
 
-### Points d'attention pour US2+
-- **Performance :** Optimiser la recherche pour 200+ onglets
-- **UX :** Recherche temps réel sans lag
-- **Accessibilité :** Navigation clavier dans les résultats
-- **Edge cases :** Onglets sans titre, URLs très longues
+### Points d'attention pour US6+
+- **Persistance :** Système de sauvegarde de sessions
+- **IA/ML :** Améliorer suggestions d'onglets inactifs
+- **Configuration :** Interface pour personnaliser catégories
+- **Performance :** Monitoring et optimisation continue
 
 ---
 
 **Dernière mise à jour :** 2025-09-18
-**Prochaine user story :** US5 - Regroupement automatique par IA
+**Prochaine user story :** US6 - Sauvegarder une session d'onglets
