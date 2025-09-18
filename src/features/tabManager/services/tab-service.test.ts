@@ -5,7 +5,11 @@ import { tabService } from './tab-service';
 const mockChrome = {
   tabs: {
     query: vi.fn(),
-    remove: vi.fn()
+    remove: vi.fn(),
+    update: vi.fn()
+  },
+  windows: {
+    update: vi.fn()
   },
   runtime: {
     lastError: undefined as chrome.runtime.LastError | undefined
@@ -169,6 +173,89 @@ describe('tabService', () => {
 
       // Act & Assert
       await expect(tabService.closeTab(tabId)).resolves.toBeUndefined();
+    });
+  });
+
+  describe('switchToTab', () => {
+    it('should switch to tab successfully', async () => {
+      // Arrange
+      const tabId = 123;
+      const windowId = 456;
+      mockChrome.tabs.update.mockImplementation((id, updateInfo, callback) => {
+        if (callback) callback({});
+      });
+      mockChrome.windows.update.mockImplementation((id, updateInfo, callback) => {
+        if (callback) callback({});
+      });
+
+      // Act
+      await tabService.switchToTab(tabId, windowId);
+
+      // Assert
+      expect(mockChrome.tabs.update).toHaveBeenCalledWith(tabId, { active: true }, expect.any(Function));
+      expect(mockChrome.windows.update).toHaveBeenCalledWith(windowId, { focused: true }, expect.any(Function));
+    });
+
+    it('should throw error when tab update fails', async () => {
+      // Arrange
+      const tabId = 123;
+      const windowId = 456;
+      mockChrome.runtime.lastError = { message: 'No tab with id: 123' } as chrome.runtime.LastError;
+      mockChrome.tabs.update.mockImplementation((id, updateInfo, callback) => {
+        if (callback) callback({});
+      });
+
+      // Act & Assert
+      await expect(tabService.switchToTab(tabId, windowId)).rejects.toThrow('Failed to switch to tab');
+
+      // Cleanup
+      mockChrome.runtime.lastError = undefined;
+    });
+
+    it('should throw error when window update fails', async () => {
+      // Arrange
+      const tabId = 123;
+      const windowId = 456;
+      mockChrome.tabs.update.mockImplementation((id, updateInfo, callback) => {
+        if (callback) callback({});
+      });
+      mockChrome.runtime.lastError = { message: 'No window with id: 456' } as chrome.runtime.LastError;
+      mockChrome.windows.update.mockImplementation((id, updateInfo, callback) => {
+        if (callback) callback({});
+      });
+
+      // Act & Assert
+      await expect(tabService.switchToTab(tabId, windowId)).rejects.toThrow('Failed to switch to tab');
+
+      // Cleanup
+      mockChrome.runtime.lastError = undefined;
+    });
+
+    it('should throw error when chrome APIs throw exceptions', async () => {
+      // Arrange
+      const tabId = 123;
+      const windowId = 456;
+      mockChrome.tabs.update.mockImplementation(() => {
+        throw new Error('Chrome API error');
+      });
+
+      // Act & Assert
+      await expect(tabService.switchToTab(tabId, windowId)).rejects.toThrow('Chrome API error');
+    });
+
+    it('should handle successful navigation flow', async () => {
+      // Arrange
+      const tabId = 123;
+      const windowId = 456;
+      mockChrome.tabs.update.mockImplementation((id, updateInfo, callback) => {
+        if (callback) callback({});
+      });
+      mockChrome.windows.update.mockImplementation((id, updateInfo, callback) => {
+        if (callback) callback({});
+      });
+
+      // Act & Assert
+      await expect(tabService.switchToTab(tabId, windowId)).resolves.toBeUndefined();
     });
   });
 });

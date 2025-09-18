@@ -7,15 +7,18 @@ import { Button } from '../../../components/ui/button';
 interface TabItemProps {
   tab: Tab;
   onClose?: (tabId: number) => void;
+  onNavigate?: (tabId: number, windowId: number) => void;
 }
 
-export function TabItem({ tab, onClose }: TabItemProps) {
+export function TabItem({ tab, onClose, onNavigate }: TabItemProps) {
   return (
     <div
       data-testid="tab-item"
+      onClick={() => onNavigate?.(tab.id, tab.windowId)}
       className={cn(
         "flex items-center gap-3 p-3 rounded-lg border hover:bg-accent/50 transition-colors",
-        tab.active && "bg-accent"
+        tab.active && "bg-accent",
+        onNavigate && "cursor-pointer"
       )}
     >
       {/* Favicon */}

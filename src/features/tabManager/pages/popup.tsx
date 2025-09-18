@@ -22,6 +22,16 @@ export function Popup() {
     }
   };
 
+  const handleNavigateToTab = async (tabId: number, windowId: number) => {
+    try {
+      await tabService.switchToTab(tabId, windowId);
+      // Close the popup after successful navigation
+      window.close();
+    } catch (error) {
+      console.error('Failed to navigate to tab:', error);
+    }
+  };
+
   if (error) {
     return <ErrorMessage message={error.message} />;
   }
@@ -44,7 +54,7 @@ export function Popup() {
             Aucun onglet trouvé pour &ldquo;{searchTerm}&rdquo;
           </div>
         ) : (
-          <TabList tabs={filteredTabs} onCloseTab={handleCloseTab} />
+          <TabList tabs={filteredTabs} onCloseTab={handleCloseTab} onNavigateToTab={handleNavigateToTab} />
         )}
       </div>
     </div>

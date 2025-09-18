@@ -45,5 +45,26 @@ export const tabService = {
     } catch (error) {
       throw new Error('Failed to close tab');
     }
+  },
+
+  async switchToTab(tabId: number, windowId: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // First, activate the tab
+      chrome.tabs.update(tabId, { active: true }, () => {
+        if (chrome.runtime.lastError) {
+          reject(new Error('Failed to switch to tab'));
+          return;
+        }
+
+        // Then, focus the window containing the tab
+        chrome.windows.update(windowId, { focused: true }, () => {
+          if (chrome.runtime.lastError) {
+            reject(new Error('Failed to switch to tab'));
+            return;
+          }
+          resolve();
+        });
+      });
+    });
   }
 };
